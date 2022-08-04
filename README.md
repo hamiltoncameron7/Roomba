@@ -44,7 +44,7 @@ This function begins the movement of the vacuum, from the starting position (0, 
 
 Eventually, this will change from taking user input to taking input from an algorithm that tells the vacuum which direction to go next
 
-##### loopDeLoop()
+#### loopDeLoop()
 
 This function is a self iterating loop. I used this instead of a for loop because of the timeout and issues with asynchronus functions
 
