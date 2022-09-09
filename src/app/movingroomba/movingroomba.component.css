@@ -1,4 +1,13 @@
 #roombaImg {
     width: 100px;
     height: 100px;
+    position: absolute;
+    z-index: 2;
+}
+
+.testing {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    cursor: move;
 }

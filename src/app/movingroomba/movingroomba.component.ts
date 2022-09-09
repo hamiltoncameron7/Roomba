@@ -80,8 +80,12 @@ export class MovingroombaComponent implements OnInit {
     this.x = this.inpX;
     this.y = this.inpY;
     
-    //rotate to proper angle and set rotate string
+    //initially rotate to proper angle and set rotate string
     this.rotateTheRoomba(xDist, yDist);
+    if(pTextElem != null){
+      pTextElem.style.transform = "translate(" + ((xCSSChange * 10).toString()) + "px, " + ((yCSSChange * 10).toString()) + "px)" + this.rotateString;
+      pTextElem.style.transition = "1s";
+    }
 
     //function turned for loop to self iterate, set i to 0 initially
     var i = 0;

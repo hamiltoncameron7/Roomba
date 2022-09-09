@@ -1,0 +1,9 @@
+<!-- two ngfors that go through the xArrays array of arrays and make buttons that report x and y back from point in array
+neeeeed to figure out how to send those x and y that were clicked to the roomba component
+also need to figure out roomba location on the grid and placing it properly and tracking
+    for this, could move it to multiple locations and have it saved like 9 on the grid is 300px x translate
+    
+-->
+<div class="buttHolder" *ngFor="let ite of xArrays; index as x;">
+    <button class="butts" *ngFor="let item of ite; index as i;" (click)="addPoint(x-4, i-4)">y: {{x-4}} x: {{i-4}}</button>
+</div>

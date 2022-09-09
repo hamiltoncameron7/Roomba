@@ -1,0 +1,11 @@
+.butts {
+    margin: 20px;
+    width: 17px;
+    height: 17px;
+}
+
+.buttHolder {
+    display: grid;
+    grid-template-columns: 100px 100px 100px 100px 100px 100px 100px 100px 100px;
+    grid-template-rows: 100px;
+}
