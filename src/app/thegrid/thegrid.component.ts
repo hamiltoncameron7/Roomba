@@ -68,7 +68,8 @@ export class ThegridComponent implements OnInit {
         divStyle += (['position:', 'absolute;'].join('').toString());
         divStyle += (['background-color:', 'black;'].join('').toString());
         //this is where the current problem is, trying to get left side to line up
-        divStyle += (['left:', theLeft - ((divWidth/2) - ((divWidth/2) * Math.cos(this.calcAngleDegrees(xPos, yPos)))), 'px;'].join('').toString());
+        console.log("Angle: " + this.calcAngleDegrees(xPos, yPos).toString() + " divWidth: " + divWidth + "theLeft: " + theLeft + "The cos: " + Math.cos((this.calcAngleDegrees(xPos, yPos) * (Math.PI/180))));
+        divStyle += (['left:', theLeft - ((divWidth/2) - ((divWidth/2) * Math.abs(Math.cos((this.calcAngleDegrees(xPos, yPos) * (Math.PI/180)))))), 'px;'].join('').toString());
         div.setAttribute('style', divStyle.toString());
         this.lastXPoint = theX;
         this.lastYPoint = theY;
