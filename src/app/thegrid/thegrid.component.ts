@@ -29,33 +29,46 @@ export class ThegridComponent implements OnInit {
   }
 
   createBoudnaryDiv(theX : number, theY : number) {
-    console.log("IT RAN");
     if(this.lastXPoint != null && this.lastYPoint != null){
       var firstButt = document.getElementById(['butts', this.lastYPoint + 4, ',' , this.lastXPoint + 4].join(''));
       var secondButt = document.getElementById(['butts', theY + 4, ',' , theX + 4].join(''));
-      console.log(['butts', theX + 4, ',' , theY + 4].join(''));
       if(firstButt != null && secondButt != null){
-        console.log("GOT HERE");
         var xPos = theX - this.lastXPoint;
         var yPos = theY - this.lastYPoint;
         var firstButtRect = firstButt.getBoundingClientRect();
         var secondButtRect = secondButt.getBoundingClientRect();
         var rotateString = "rotate(" + parseInt((this.calcAngleDegrees(xPos, yPos)).toString()) + "deg)";
+        console.log(this.calcAngleDegrees(xPos, yPos));
         var div = document.createElement('div');
         var divStyle = '';
-        var xDist = firstButtRect.x - secondButtRect.x;
-        var yDist = firstButtRect.y - secondButtRect.y;
+        var xDist = Math.abs(firstButtRect.x - secondButtRect.x);
+        var yDist = Math.abs(firstButtRect.y - secondButtRect.y);
+        console.log(xDist, "," , yDist);
         var divWidth = Math.sqrt((xDist * xDist)+(yDist * yDist));
+        var theTop = firstButtRect.top;
+        if(firstButtRect.top < secondButtRect.top){
+          theTop = firstButtRect.top;
+        }
+        else {
+          theTop = secondButtRect.top;
+        }
+        var theLeft = firstButtRect.left;
+        if(firstButtRect.left < secondButtRect.left){
+          theLeft = firstButtRect.left;
+        }
+        else {
+          theLeft = secondButtRect.left;
+        }
         document.body.append(div);
         div.setAttribute("class", "bound");
-        console.log(divStyle);
         divStyle += (["width:", divWidth, 'px;'].join('').toString());
-        divStyle += (["top:", firstButtRect.top, 'px;'].join('').toString());
+        divStyle += (["top:", theTop + Math.abs(yDist/2), 'px;'].join('').toString());
         divStyle += (["transform:", rotateString, ';'].join('').toString());
         divStyle += (['height:', '10px;'].join('').toString());
-        divStyle += (['position:', 'fixed;'].join('').toString());
+        divStyle += (['position:', 'absolute;'].join('').toString());
         divStyle += (['background-color:', 'black;'].join('').toString());
-        divStyle += (['left:', firstButtRect.left, 'px;'].join('').toString());
+        //this is where the current problem is, trying to get left side to line up
+        divStyle += (['left:', theLeft - ((divWidth/2) - ((divWidth/2) * Math.cos(this.calcAngleDegrees(xPos, yPos)))), 'px;'].join('').toString());
         div.setAttribute('style', divStyle.toString());
         this.lastXPoint = theX;
         this.lastYPoint = theY;
@@ -69,7 +82,6 @@ export class ThegridComponent implements OnInit {
 
   addPoint(xPoint : number, yPoint : number){
     this.boudnary.push([xPoint, yPoint]);
-    console.log(this.boudnary);
 
     this.messageEvent.emit(null);
     if(this.lastXPoint == null && this.lastYPoint == null){

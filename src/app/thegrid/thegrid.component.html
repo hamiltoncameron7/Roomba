@@ -5,5 +5,6 @@ also need to figure out roomba location on the grid and placing it properly and 
     
 -->
 <div class="buttHolder" *ngFor="let ite of xArrays; index as x;">
-    <button class="butts" *ngFor="let item of ite; index as i;" (click)="addPoint(x-4, i-4)">y: {{x-4}} x: {{i-4}}</button>
+    <button class="butts" id="butts{{[x , i]}}" *ngFor="let item of ite; index as i;" (click)="addPoint(item, ite[x])">y: {{ite[x]}} x: {{item}}</button>
 </div>
+<div class="bound" transform="rotate(45deg)" style="width:10000px; top:749px; height:10px; position:absolute; background-color:black"></div>
