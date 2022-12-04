@@ -2,9 +2,8 @@
 neeeeed to figure out how to send those x and y that were clicked to the roomba component
 also need to figure out roomba location on the grid and placing it properly and tracking
     for this, could move it to multiple locations and have it saved like 9 on the grid is 300px x translate
-    
+
 -->
 <div class="buttHolder" *ngFor="let ite of xArrays; index as x;">
-    <button class="butts" id="butts{{[x , i]}}" *ngFor="let item of ite; index as i;" (click)="addPoint(item, ite[x])">y: {{ite[x]}} x: {{item}}</button>
+    <button class="butts" id="butts{{[x , i]}}" *ngFor="let item of ite; index as i;" (click)="addPoint(item, ite[x])"></button>
 </div>
-<div class="bound" transform="rotate(45deg)" style="width:10000px; top:749px; height:10px; position:absolute; background-color:black"></div>

@@ -35,29 +35,39 @@ export class ThegridComponent implements OnInit {
       if(firstButt != null && secondButt != null){
         var xPos = theX - this.lastXPoint;
         var yPos = theY - this.lastYPoint;
-        var firstButtRect = firstButt.getBoundingClientRect();
-        var secondButtRect = secondButt.getBoundingClientRect();
+        // get document coordinates of the element
+        function getCoords(elem : Element) {
+          let box = elem.getBoundingClientRect();
+
+          return {
+            top: box.top + window.pageYOffset,
+            right: box.right + window.pageXOffset,
+            bottom: box.bottom + window.pageYOffset,
+            left: box.left + window.pageXOffset
+          };
+        }
+        console.log("First butt x: " + getCoords(firstButt).left + " first butt top: " + getCoords(firstButt).top + " first butt y: " + getCoords(firstButt).top + " get coords second butt y: " + getCoords(secondButt).top + " second butt top: " + getCoords(secondButt).top);
         var rotateString = "rotate(" + parseInt((this.calcAngleDegrees(xPos, yPos)).toString()) + "deg)";
         console.log(this.calcAngleDegrees(xPos, yPos));
         var div = document.createElement('div');
         var divStyle = '';
-        var xDist = Math.abs(firstButtRect.x - secondButtRect.x);
-        var yDist = Math.abs(firstButtRect.y - secondButtRect.y);
+        var xDist = Math.abs(getCoords(firstButt).left - getCoords(secondButt).left);
+        var yDist = Math.abs(getCoords(firstButt).top - getCoords(secondButt).top);
         console.log(xDist, "," , yDist);
         var divWidth = Math.sqrt((xDist * xDist)+(yDist * yDist));
-        var theTop = firstButtRect.top;
-        if(firstButtRect.top < secondButtRect.top){
-          theTop = firstButtRect.top;
+        var theTop = getCoords(firstButt).top;
+        if(getCoords(firstButt).top < getCoords(secondButt).top){
+          theTop = getCoords(firstButt).top;
         }
         else {
-          theTop = secondButtRect.top;
+          theTop = getCoords(secondButt).top;
         }
-        var theLeft = firstButtRect.left;
-        if(firstButtRect.left < secondButtRect.left){
-          theLeft = firstButtRect.left;
+        var theLeft = getCoords(firstButt).left;
+        if(getCoords(firstButt).left < getCoords(secondButt).left){
+          theLeft = getCoords(firstButt).left;
         }
         else {
-          theLeft = secondButtRect.left;
+          theLeft = getCoords(secondButt).left;
         }
         document.body.append(div);
         div.setAttribute("class", "bound");
@@ -67,8 +77,7 @@ export class ThegridComponent implements OnInit {
         divStyle += (['height:', '10px;'].join('').toString());
         divStyle += (['position:', 'absolute;'].join('').toString());
         divStyle += (['background-color:', 'black;'].join('').toString());
-        //this is where the current problem is, trying to get left side to line up
-        console.log("Angle: " + this.calcAngleDegrees(xPos, yPos).toString() + " divWidth: " + divWidth + "theLeft: " + theLeft + "The cos: " + Math.cos((this.calcAngleDegrees(xPos, yPos) * (Math.PI/180))));
+        console.log("Angle: " + this.calcAngleDegrees(xPos, yPos).toString() + " divWidth: " + divWidth + "theLeft: " + theLeft + " TheTop: " + theTop + "The cos: " + Math.cos((this.calcAngleDegrees(xPos, yPos) * (Math.PI/180))));
         divStyle += (['left:', theLeft - ((divWidth/2) - ((divWidth/2) * Math.abs(Math.cos((this.calcAngleDegrees(xPos, yPos) * (Math.PI/180)))))), 'px;'].join('').toString());
         div.setAttribute('style', divStyle.toString());
         this.lastXPoint = theX;
@@ -85,6 +94,7 @@ export class ThegridComponent implements OnInit {
     this.boudnary.push([xPoint, yPoint]);
 
     this.messageEvent.emit(null);
+
     if(this.lastXPoint == null && this.lastYPoint == null){
       this.lastXPoint = xPoint;
       this.lastYPoint = yPoint;
