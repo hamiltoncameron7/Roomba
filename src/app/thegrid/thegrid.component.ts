@@ -16,6 +16,13 @@ export class ThegridComponent implements OnInit {
   lastXPoint : number | null;
   lastYPoint : number | null;
 
+  //saving the first button to check if the boundary is closed
+  firstXPoint : number | null;
+  firstYPoint : number | null;
+
+  //keeps track of if there is an existing boundary
+  boundExists : boolean | null;
+
   //calculate angle from 0,0 to x,y, returns degrees
   calcAngleDegrees(x:number, y:number) : number{
     return Math.atan2(y, x) * 180 / Math.PI;
@@ -81,18 +88,23 @@ export class ThegridComponent implements OnInit {
         document.body.append(div);
         div.setAttribute("class", "bound");
         divStyle += (["width:", divWidth, 'px;'].join('').toString());
-        divStyle += (["top:", theTop + Math.abs(yDist/2), 'px;'].join('').toString());
+        divStyle += (["top:", (theTop + Math.abs(yDist/2) + 5), 'px;'].join('').toString());
         divStyle += (["transform:", rotateString, ';'].join('').toString());
         divStyle += (['height:', '10px;'].join('').toString());
         divStyle += (['position:', 'absolute;'].join('').toString());
         divStyle += (['background-color:', 'black;'].join('').toString());
         //used law of sines and trigonometry to calc distance from left after rotation from center
-        divStyle += (['left:', theLeft - ((divWidth/2) - ((divWidth/2) * Math.abs(Math.cos((this.calcAngleDegrees(xPos, yPos) * (Math.PI/180)))))), 'px;'].join('').toString());
+        divStyle += (['left:', (theLeft - ((divWidth/2) - ((divWidth/2) * Math.abs(Math.cos((this.calcAngleDegrees(xPos, yPos) * (Math.PI/180)))))) + 5), 'px;'].join('').toString());
+        divStyle += (['z-index:-1']);
         div.setAttribute('style', divStyle.toString());
 
         //set the last button clicked to the new first button for the next boundary
         this.lastXPoint = theX;
         this.lastYPoint = theY;
+
+        if(this.firstXPoint != null && this.lastXPoint == this.firstXPoint && this.lastYPoint == this.firstYPoint){
+          this.closeBoundary();
+        }
       }
     }
   }
@@ -110,21 +122,43 @@ export class ThegridComponent implements OnInit {
     if(this.lastXPoint == null && this.lastYPoint == null){
       this.lastXPoint = xPoint;
       this.lastYPoint = yPoint;
+      this.firstXPoint = xPoint;
+      this.firstYPoint = yPoint;
+      if(this.boundExists){
+        let boundDivsArr = document.getElementsByClassName("bound");
+        let boundDivsArrSize = boundDivsArr.length;
+        for(let i = 0; i < boundDivsArrSize; i++){
+          console.log(i);
+          boundDivsArr[0].remove();
+        }
+        this.boundExists = false;
+        alert("New boundary created! Only one boundary at a time");
+      }
     }
     else{
       this.createBoudnaryDiv(xPoint, yPoint);
     }
   }
 
+  closeBoundary(){
+    this.lastXPoint = null;
+    this.lastYPoint = null;
+    this.boundExists = true;
+    alert("Boundary created! Position the roomba in the boundary and press start!");
+  }
+
   constructor() {
     //add x and y coords for buttons
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
       this.xArrays[i] = new Array();
       this.xArrays[i].push(-4, -3, -2, -1, 0, 1, 2, 3, 4);
     }
 
     this.lastXPoint = null;
     this.lastYPoint = null;
+    this.firstXPoint = null;
+    this.firstYPoint = null;
+    this.boundExists = false;
    }
 
   ngOnInit(): void {
